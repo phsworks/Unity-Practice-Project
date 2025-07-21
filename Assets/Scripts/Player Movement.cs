@@ -25,12 +25,16 @@ public class PlayerMovement : MonoBehaviour
     public float BulletSpeed = 100f;
     private bool _isShooting;
 
+    private GameBehaviour _gameManager;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehaviour>();
 
     }
 
@@ -83,6 +87,15 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Enemy")
+        {
+            _gameManager.HP -= 1;
+            Debug.Log("Player hit");
+        }
+    }
+
     private bool IsGrounded()
     {
         Vector3 capsuleBottom = new Vector3(_col.bounds.center.x, _col.bounds.min.y, _col.bounds.center.z);
@@ -91,9 +104,6 @@ public class PlayerMovement : MonoBehaviour
 
         return grounded;
     }
-
-
-
 
 
 
